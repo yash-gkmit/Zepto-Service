@@ -1,6 +1,9 @@
+import 'reflect-metadata';
 import express, { Express } from 'express';
 import cors from 'cors';
 import { router } from './routes/index';
+import { connectDB } from './config/db';
+
 
 const app: Express = express();
 app.use(cors());
@@ -13,6 +16,14 @@ router.get('/health', (req, res) => {
   });
 
 const PORT = 3300;
-app.listen(PORT, () => {
-  console.log(`Server running on port : ${PORT}`)
-});
+connectDB()
+  .then(() => {
+    console.log('Database connected successfully');
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port: ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Error connecting to the database:', err);
+  });
