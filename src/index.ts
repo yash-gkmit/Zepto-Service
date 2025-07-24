@@ -3,13 +3,16 @@ import express, { Express } from 'express';
 import cors from 'cors';
 import { router } from './routes/index';
 import { connectDB } from './config/db';
-
+import { errorHandler } from './middleware/error.middleware';
 
 const app: Express = express();
 app.use(cors());
 app.use(express.json());
 
 app.use('/api', router);
+
+// Error handler
+app.use(errorHandler);
 
 router.get('/health', (req, res) => {
     res.send("Hello world!");
